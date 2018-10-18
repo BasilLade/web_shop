@@ -6,21 +6,21 @@
  * Time: 14:37
  */
 
-class Produkt extends Entity
+class Product extends Entity
 {
     const NAME = 'name';
-    const BEZ = 'beschreibung';
-    const PREIS = 'preis';
+    const DESC = 'description';
+    const PRICE = 'price';
 
     public function get($fieldName) {
         switch($fieldName) {
-            case Bestellung::class:
+            case Order::class:
                 $filter = [];
                 $filter[Connector::LEFT] = $this->data[self::ID];
                 $connectedEntities = Database::instance()->loadList(ConfigDB::SCHEMA,Connector::class,$filter);
                 $result = [];
                 foreach ($connectedEntities as $connection){
-                    $result[] = Database::instance()->load(ConfigDB::SCHEMA,Bestellung::class,$connection->get(Connector::RIGHT));
+                    $result[] = Database::instance()->load(ConfigDB::SCHEMA,Order::class,$connection->get(Connector::RIGHT));
                 }
                 return $result;
 
@@ -34,10 +34,10 @@ class Produkt extends Entity
                 }
                 return $result;
 
-            case BILD::class:
+            case Picture::class:
                 $filter = [];
-                $filter[Bild::PRODUKT] = $this->data[self::ID];
-                return Database::instance()->loadList(ConfigDB::SCHEMA, Bild::class, $filter);
+                $filter[Picture::PRODUCT] = $this->data[self::ID];
+                return Database::instance()->loadList(ConfigDB::SCHEMA, Picture::class, $filter);
 
             default:
                 return parent::get($fieldName);

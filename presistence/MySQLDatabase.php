@@ -33,30 +33,26 @@ class MySQLDatabase extends Database implements DatabaseInt
      * Passwort für die Datenbank am Arbeits-PC
      */
     const PASSWORD = '123';
-
+    protected static $db = null;
     protected $transaction = false;
+    protected $connection = null;
 
-    public function beginTransaction() {
+    public function beginTransaction()
+    {
         $this->transaction = true;
         return $this->connection->beginTransaction();
     }
 
-    public function commit() {
-        $this->transaction = false;
-        return $this->connection->commit();
-    }
-
-    public function rollback() {
-        $this->transaction = false;
-        return $this->connection->rollback();
-    }
     /*
      * <code>$connection</code> auf NULL gesetzt, weil am Anfang 
      * keine Verbindung zur Datenbank besteht
      */
-    protected static $db = null;
-    protected $connection = null;
 
+    public function commit()
+    {
+        $this->transaction = false;
+        return $this->connection->commit();
+    }
 
     public function load(string $schema, string $dataType, string $id, array $filter = [], $json = null)
     {
@@ -69,7 +65,7 @@ class MySQLDatabase extends Database implements DatabaseInt
         }
 
         /*
-         * Funktion <code>connect</code> aufrufen um eine Verbindung zur 
+         * Funktion <code>connect</code> aufrufen um eine Verbindung zur
          * Datenbank herzustellen.
          */
         $this->connect($schema);
@@ -119,10 +115,6 @@ class MySQLDatabase extends Database implements DatabaseInt
         return null;
     }
 
-    /*
-     * Funktion <code>loadList</code> wird gebraucht um die Waren auszulesen.
-     */
-
     /**
      *
      * @param $schema
@@ -142,7 +134,7 @@ class MySQLDatabase extends Database implements DatabaseInt
         $class = strtolower($dataType);
 
         /*
-         * Funktion <code>connect</code> aufrufen um eine Verbindung zur 
+         * Funktion <code>connect</code> aufrufen um eine Verbindung zur
          * Datenbank herzustellen
          */
         $this->connect($schema);
@@ -184,7 +176,7 @@ class MySQLDatabase extends Database implements DatabaseInt
                 $entity = new $dataType();
 
                 /*
-                 * Mit Objekt <code>$entity</code> Aufruf der Funktion 
+                 * Mit Objekt <code>$entity</code> Aufruf der Funktion
                  * <code>setData</code> (die von "Entity" vererbt wurde)
                  */
                 $entity->setData($data);
@@ -203,27 +195,9 @@ class MySQLDatabase extends Database implements DatabaseInt
         }
     }
 
-    protected function buildFilter(array $filter = [])
-    {
-        $filterSql = '';
-        /*
-         * Wenn <code>$filter</code> nicht null ist, dann Datenbank-Abfrage mit 
-         * dem gewünschten Kategorienfilter machen.
-         */
-        if (count($filter) > 0) {
-            $filterSql = ' WHERE ';
-            foreach ($filter as $key => $f) {
-                $filterSql .= $key;
-                $filterSql .= '=';
-                $filterSql .= '\'' . $f . '\' AND ';
-            }
-        }
-
-        $filterSql = substr($filterSql, 0, -4);
-
-
-        return $filterSql;
-    }
+    /*
+     * Funktion <code>loadList</code> wird gebraucht um die Waren auszulesen.
+     */
 
     /**
      * @param $schema
@@ -247,7 +221,7 @@ class MySQLDatabase extends Database implements DatabaseInt
 
 
             /*
-             * Holt die Daten aus dem Entity-Objekt und speichert sie in 
+             * Holt die Daten aus dem Entity-Objekt und speichert sie in
              * <code>$data</code>
              */
             $data = $entity->getData();
@@ -266,7 +240,7 @@ class MySQLDatabase extends Database implements DatabaseInt
             foreach ($data as $fieldName => $fieldValue) {
 
                 /*
-                 * Hier werden die Spaltennamen durch Komma 
+                 * Hier werden die Spaltennamen durch Komma
                  * getrennt aneinandergehängt.
                  */
                 $sqlColumn .= $fieldName . ", ";
@@ -283,7 +257,7 @@ class MySQLDatabase extends Database implements DatabaseInt
             }
 
             /*
-             * Hier werden mit <code>substr</code> das letzte Komma und Leerzeichen 
+             * Hier werden mit <code>substr</code> das letzte Komma und Leerzeichen
              * weggelassen.
              */
             $sqlColumn = substr($sqlColumn, 0, -2);
@@ -298,7 +272,7 @@ class MySQLDatabase extends Database implements DatabaseInt
             $values = [];
 
             /*
-             * Holt die Daten aus dem Entity-Objekt und speichert sie in 
+             * Holt die Daten aus dem Entity-Objekt und speichert sie in
              * <code>$data</code>
              */
             $data = $entity->getData();
@@ -341,10 +315,6 @@ class MySQLDatabase extends Database implements DatabaseInt
         return $entity;
     }
 
-    /*
-     * Funktion um Datensätze als gelöscht zu markieren
-     */
-
     public function delete($schema, $dataType, $id)
     {
         /*
@@ -364,6 +334,40 @@ class MySQLDatabase extends Database implements DatabaseInt
         }
     }
 
+    protected function buildFilter(array $filter = [])
+    {
+        $filterSql = '';
+        /*
+         * Wenn <code>$filter</code> nicht null ist, dann Datenbank-Abfrage mit
+         * dem gewünschten Kategorienfilter machen.
+         */
+        if (count($filter) > 0) {
+            $filterSql = ' WHERE ';
+            foreach ($filter as $key => $f) {
+                if (is_array($f)) {
+                    foreach ($f as $f2) {
+                        $filterSql .= $key;
+                        $filterSql .= '=';
+                        $filterSql .= '\'' . $f2 . '\' OR ';
+                    }
+                } else {
+                    $filterSql .= $key;
+                    $filterSql .= '=';
+                    $filterSql .= '\'' . $f . '\' AND ';
+                }
+            }
+        }
+
+        $filterSql = substr($filterSql, 0, -4);
+
+
+        return $filterSql;
+    }
+
+    /*
+     * Funktion um Datensätze als gelöscht zu markieren
+     */
+
     /**
      * Funktion um eine Datenbank-Verbindung aufzubauen
      */
@@ -378,8 +382,8 @@ class MySQLDatabase extends Database implements DatabaseInt
             try {
 
                 /*
-                 * Hier werden die Verbindungs-Daten die in den Konstanten 
-                 * gespeichert sind an das neue PDO-Objekt übergeben. 
+                 * Hier werden die Verbindungs-Daten die in den Konstanten
+                 * gespeichert sind an das neue PDO-Objekt übergeben.
                  * Das PDO Objekt kümmert sich dann um die Verbindung zur Datenbank.
                  */
                 $this->connection = new PDO(self::DRIVER . ":host=" . self::HOST . ";dbname=" . $schema, self::USER, self::PASSWORD);
@@ -387,7 +391,7 @@ class MySQLDatabase extends Database implements DatabaseInt
                 /*
                  * Die Fehlerbehandlung des PDO-Objekts wird so gesetzt damit
                  * beijedem Fehler eine Ausnahme geworfen wird, damit können
-                 * wir diese Fehler abfangen. 
+                 * wir diese Fehler abfangen.
                  */
                 $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
@@ -395,6 +399,12 @@ class MySQLDatabase extends Database implements DatabaseInt
                 exit();
             }
         }
+    }
+
+    public function rollback()
+    {
+        $this->transaction = false;
+        return $this->connection->rollback();
     }
 
 }

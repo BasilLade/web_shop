@@ -6,11 +6,11 @@
  * Time: 14:35
  */
 
-class Kunde extends Entity
+class Customer extends Entity
 {
-    const VORNAME = 'vorname';
+    const FIRSTNAME = 'firstname';
     const NAME = 'name';
     const EMAIL = 'email';
-    const ALTER = 'alter';
+    const AGE = 'age';
 
 }
