@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Klasse um einen Autoloader zu erzeugen
+ * Klasse um einen AutoloaderBak zu erzeugen
  *
  * @author Jorge Windmeisser
  */
-Autoloader::register();
+AutoloaderBak::register();
 
-class Autoloader {
+class AutoloaderBak {
 
     private static $autoloader = null;
     private static $filePath;
@@ -22,13 +22,13 @@ class Autoloader {
     }
 
     /**
-     * Erzeugt einen Autoloader, wenn es noch keinen gibt.
+     * Erzeugt einen AutoloaderBak, wenn es noch keinen gibt.
      *
      */
 
     public static function register() {
         if (self::$autoloader === null) {
-            self::$autoloader = new Autoloader();
+            self::$autoloader = new AutoloaderBak();
         }
     }
 

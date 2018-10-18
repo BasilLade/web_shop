@@ -17,27 +17,27 @@ class Product extends Entity
             case Order::class:
                 $filter = [];
                 $filter[Connector::LEFT] = $this->data[self::ID];
-                $connectedEntities = Database::instance()->loadList(ConfigDB::SCHEMA,Connector::class,$filter);
+                $connectedEntities = Database::instance()->loadList(DBSchema::SCHEMA,Connector::class,$filter);
                 $result = [];
                 foreach ($connectedEntities as $connection){
-                    $result[] = Database::instance()->load(ConfigDB::SCHEMA,Order::class,$connection->get(Connector::RIGHT));
+                    $result[] = Database::instance()->load(DBSchema::SCHEMA,Order::class,$connection->get(Connector::RIGHT));
                 }
                 return $result;
 
             case Tag::class:
                 $filter = [];
                 $filter[Connector::LEFT] = $this->data[self::ID];
-                $connectedEntities = Database::instance()->loadList(ConfigDB::SCHEMA, Connector::class, $filter);
+                $connectedEntities = Database::instance()->loadList(DBSchema::SCHEMA, Connector::class, $filter);
                 $result = [];
                 foreach($connectedEntities as $connection) {
-                    $result[] =  Database::instance()->load(ConfigDB::SCHEMA, Tag::class, $connection->get(Connector::RIGHT));
+                    $result[] =  Database::instance()->load(DBSchema::SCHEMA, Tag::class, $connection->get(Connector::RIGHT));
                 }
                 return $result;
 
             case Picture::class:
                 $filter = [];
                 $filter[Picture::PRODUCT] = $this->data[self::ID];
-                return Database::instance()->loadList(ConfigDB::SCHEMA, Picture::class, $filter);
+                return Database::instance()->loadList(DBSchema::SCHEMA, Picture::class, $filter);
 
             default:
                 return parent::get($fieldName);

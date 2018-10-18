@@ -15,7 +15,7 @@ class EntityFactory
         $produkt->set(Product::NAME, $name);
         $produkt->set(Product::DESC, $description);
         $produkt->set(Product::PRICE, $price);
-        $entity = Database::instance()->save(ConfigDB::SCHEMA, $produkt);
+        $entity = Database::instance()->save(DBSchema::SCHEMA, $produkt);
 
 
             foreach ($tags as $tag) {
@@ -34,14 +34,14 @@ class EntityFactory
         $connector = new Connector();
         $connector->set(Connector::LEFT, $left);
         $connector->set(Connector::RIGHT, $right);
-        return Database::instance()->save(ConfigDB::SCHEMA, $connector);
+        return Database::instance()->save(DBSchema::SCHEMA, $connector);
     }
 
     public static function newTag($name): ?Tag
     {
         $tag = new Tag();
         $tag->set(Tag::NAME, $name);
-        return Database::instance()->save(ConfigDB::SCHEMA, $tag);
+        return Database::instance()->save(DBSchema::SCHEMA, $tag);
     }
 
     public static function newPicture(string $path, Product $product): ?Picture
@@ -49,7 +49,7 @@ class EntityFactory
         $bild = new Picture();
         $bild->set(Picture::PATH, $path);
         $bild->set(Picture::PRODUCT, $product->get(Product::ID));
-        return Database::instance()->save(ConfigDB::SCHEMA, $bild);
+        return Database::instance()->save(DBSchema::SCHEMA, $bild);
     }
 
     public static function newCustomer(string $firstname, string $surname, string $email, int $age): ?Customer
@@ -59,7 +59,7 @@ class EntityFactory
         $kunde->set(Customer::NAME, $surname);
         $kunde->set(Customer::EMAIL, $email);
         $kunde->set(Customer::AGE, $age);
-        return Database::instance()->save(ConfigDB::SCHEMA, $kunde);
+        return Database::instance()->save(DBSchema::SCHEMA, $kunde);
 
     }
 
@@ -69,7 +69,7 @@ class EntityFactory
         $bes = new Order();
         $bes->set(Order::DATE, $date);
         $bes->set(Order::CUSTOMER, $customer->get(Customer::ID));
-        $entity = Database::instance()->save(ConfigDB::SCHEMA, $bes);
+        $entity = Database::instance()->save(DBSchema::SCHEMA, $bes);
 
         foreach ($products as $product) {
             self::newConnector($bes, $product);

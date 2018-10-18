@@ -6,7 +6,7 @@
  * Time: 10:24
  */
 
-class ConfigDB
+class DBSchema
 {
     const SCHEMA = 'webshop';
 }

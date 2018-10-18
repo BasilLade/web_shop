@@ -116,7 +116,7 @@ class Entity implements EntityInt
 
     public function connectTo(Entity $value)
     {
-        $checkexist = Database::instance()->loadList(ConfigDB::SCHEMA, Connector::class,
+        $checkexist = Database::instance()->loadList(DBSchema::SCHEMA, Connector::class,
             [
                 Connector::LEFT => $this->get(self::ID),
                 Connector::RIGHT => $value->get(self::ID)
@@ -135,7 +135,7 @@ class Entity implements EntityInt
 
     public function disconnectFrom(Entity $value)
     {
-        $checkexist = Database::instance()->loadList(ConfigDB::SCHEMA, Connector::class,
+        $checkexist = Database::instance()->loadList(DBSchema::SCHEMA, Connector::class,
             [
                 Connector::LEFT => $this->get(self::ID),
                 Connector::RIGHT => $value->get(self::ID)
@@ -143,7 +143,7 @@ class Entity implements EntityInt
         if (count($checkexist) !== 0) {
             echo 'HERE';
             foreach ($checkexist as $connection)
-            Database::instance()->delete(ConfigDB::SCHEMA, Connector::class, $connection->get(self::ID));
+            Database::instance()->delete(DBSchema::SCHEMA, Connector::class, $connection->get(self::ID));
         }
 
     }    /**
