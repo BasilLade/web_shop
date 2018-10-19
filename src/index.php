@@ -10,14 +10,16 @@ include_once('Autoloader.php');
 </head>
 <body>
 <?php
-
+echo '&#9786<br>';
 
 //$phone = EntityFactory::newTag('Handy');
 //$tv = EntityFactory::newTag('TV');
 //$android = EntityFactory::newTag('Android');
 
-$button = new WidgetButton('webshop');
+$button = new ButtonWidget('webshop');
 $button->setLabel('hallo');
+$button->addCssClass('test');
+$button->setValue('');
 echo $button;
 $protaghandy = Database::instance()->loadList(DBSchema::SCHEMA, Tag::class, [
     Tag::NAME => [
@@ -25,7 +27,6 @@ $protaghandy = Database::instance()->loadList(DBSchema::SCHEMA, Tag::class, [
         'Android'
     ]
 ]);
-
 $protagtv = Database::instance()->loadList(DBSchema::SCHEMA, Tag::class, [Tag::NAME => 'TV']);
 //$product = EntityFactory::newProduct('Sony-Handy', $protaghandy, 'das ist ein Handy', 423.90);
 //$updateproduct = EntityFactory::newProduct('Sony-Fernseh',$protagtv,'das ist ein Fernseh',773.00);
@@ -50,7 +51,9 @@ foreach ($tags as $kategorie) {
 }
 echo '</table>';
 foreach ($img as $value) {
-    echo '<img src="' . $value->get(Picture::PATH) . '">';
+//    echo '<img src="' . $value->get(Picture::PATH) . '">';
+    $image = new ImageWidget($value->get(Picture::PATH));
+    echo $image;
 }
 
 echo '<table>';
@@ -59,7 +62,10 @@ foreach ($products as $value) {
     echo '<th>' . $value->get(Product::ID) . '</th>';
     $bilder = $value->get(Picture::class);
     foreach ($bilder as $bild) {
-        echo '<td><img src="' . $bild->get(Picture::PATH) . '" width="30%;"</td>';
+//        echo '<td><img src="' . $bild->get(Picture::PATH) . '" width="30%;"</td>';
+        $image = new ImageWidget($bild->get(Picture::PATH));
+        $image->addCssClass('Sony');
+        echo '<td>' . $image . '</td>';
     }
     echo '<td> ' . $value->get(Product::NAME) . '</td>';
     echo '<td> ' . $value->get(Product::DESC) . '</td>';

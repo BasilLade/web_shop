@@ -6,7 +6,7 @@
  * Time: 14:20
  */
 
-class WidgetButton extends Widget
+class ButtonWidget extends Widget
 {
 
     /**
