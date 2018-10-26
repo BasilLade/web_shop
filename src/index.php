@@ -7,6 +7,9 @@ include_once('Autoloader.php');
     <meta charset="UTF-8">
     <title>webshop</title>
     <link rel="stylesheet" href="assets/css/style.css">
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script src="lib/js/jquery/jquery-3.3.1.min.js"></script>
+    <script src="action/js/AddToCart.js"></script>
 </head>
 <body>
 <?php
@@ -15,9 +18,7 @@ echo '&#9786<br>';
 
 
 $button = new ButtonWidget('webshop');
-$button->setLabel('hallo');
 $button->addCssClass('test');
-$button->setValue('');
 echo $button;
 
 //$phone = EntityFactory::newTag('Handy');
@@ -52,12 +53,11 @@ foreach ($tags as $kategorie) {
     echo '</tr>';
 }
 echo '</table>';
-foreach ($img as $value) {
-//    echo '<img src="' . $value->get(Picture::PATH) . '">';
-    $image = new ImageWidget($value->get(Picture::PATH));
-    echo $image;
-}
-
+//foreach ($img as $value) {
+////    echo '<img src="' . $value->get(Picture::PATH) . '">';
+//    $image = new ImageWidget($value->get(Picture::PATH));
+//    echo $image;
+//}
 echo '<table>';
 foreach ($products as $value) {
     echo '<tr>';
@@ -74,7 +74,7 @@ foreach ($products as $value) {
     echo '</td>';
     echo '<td> ' . $value->get(Product::NAME) . '</td>';
     echo '<td> ' . $value->get(Product::DESC) . '</td>';
-    echo '<td> ' . $value->get(Product::PRICE) . ' Fr.</td>';
+    echo '<td id="preis"> ' . $value->get(Product::PRICE) . ' Fr.</td>';
 
     $cats = $value->get(Tag::class);
     echo '<td>';
@@ -87,11 +87,15 @@ foreach ($products as $value) {
     echo '</td>';
 
     echo '<td>';
-    $button = new ButtonWidget('webshop');
-    $button->setLabel($value->get(Product::NAME) . ' Kaufen');
-    $button->addCssClass('test');
-    $button->setValue('');
-    echo $button;
+//    $button = new ButtonWidget('webshop');
+//    $button->setLabel($value->get(Product::NAME) . ' Hinzufügen');
+//    $button->addCssClass('test');
+//    $button->setValue($value->get(Product::ID));
+//    $button->setActionName('addToCart');
+//    echo $button;
+    ?>
+    <button type="button" onclick="addToCart()"><?= $value->get(Product::NAME) . ' Hinzufügen' ?></button>
+        <?php
     echo '</tr>';
 }
 echo '</table>';
