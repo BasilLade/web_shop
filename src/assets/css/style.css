@@ -13,7 +13,9 @@ th,td{
     padding: 10px;
 }
 .Sony{
-    width: 30%;
+    width: 150px;
+    margin: 5px;
+
 }
 .ImageWidget{
     border: 1px solid black;

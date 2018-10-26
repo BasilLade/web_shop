@@ -12,34 +12,36 @@ include_once('Autoloader.php');
 <?php
 echo '&#9786<br>';
 
-//$phone = EntityFactory::newTag('Handy');
-//$tv = EntityFactory::newTag('TV');
-//$android = EntityFactory::newTag('Android');
+
 
 $button = new ButtonWidget('webshop');
 $button->setLabel('hallo');
 $button->addCssClass('test');
 $button->setValue('');
 echo $button;
-$protaghandy = Database::instance()->loadList(DBSchema::SCHEMA, Tag::class, [
-    Tag::NAME => [
-        'Handy',
-        'Android'
-    ]
-]);
-$protagtv = Database::instance()->loadList(DBSchema::SCHEMA, Tag::class, [Tag::NAME => 'TV']);
+
+//$phone = EntityFactory::newTag('Handy');
+//$tv = EntityFactory::newTag('TV');
+//$android = EntityFactory::newTag('Android');
+//$protaghandy = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class, [
+//    Tag::NAME => [
+//        'Handy',
+//        'Android'
+//    ]
+//]);
+//$protagtv = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class, [Tag::NAME => 'TV']);
 //$product = EntityFactory::newProduct('Sony-Handy', $protaghandy, 'das ist ein Handy', 423.90);
 //$updateproduct = EntityFactory::newProduct('Sony-Fernseh',$protagtv,'das ist ein Fernseh',773.00);
-
-//$handy = Database::instance()->load(DBSchema::SCHEMA,Product::class, $product);
-//$bild = EntityFactory::newPicture('assets/img/img.png',$handy);
 //
+//$handy = Database::instance()->load(DBConfig::SCHEMA,Product::class, $product);
+//$bild = EntityFactory::newPicture('assets/img/img.png',$handy);
 
-$products = Database::instance()->loadList(DBSchema::SCHEMA, Product::class);
-$tags = Database::instance()->loadList(DBSchema::SCHEMA, Tag::class);
-$img = Database::instance()->loadList(DBSchema::SCHEMA, Picture::class);
 
-$testupdates = Database::instance()->loadList(DBSchema::SCHEMA, Product::class, [Product::NAME => 'Sony Fernseher']);
+$products = Database::instance()->loadList(DBConfig::SCHEMA, Product::class);
+$tags = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class);
+$img = Database::instance()->loadList(DBConfig::SCHEMA, Picture::class);
+
+$testupdates = Database::instance()->loadList(DBConfig::SCHEMA, Product::class, [Product::NAME => 'Sony Fernseher']);
 
 
 echo '<table>';
@@ -61,24 +63,40 @@ foreach ($products as $value) {
     echo '<tr>';
     echo '<th>' . $value->get(Product::ID) . '</th>';
     $bilder = $value->get(Picture::class);
+
+    echo '<td>';
     foreach ($bilder as $bild) {
 //        echo '<td><img src="' . $bild->get(Picture::PATH) . '" width="30%;"</td>';
         $image = new ImageWidget($bild->get(Picture::PATH));
         $image->addCssClass('Sony');
-        echo '<td>' . $image . '</td>';
+        echo $image;
     }
+    echo '</td>';
     echo '<td> ' . $value->get(Product::NAME) . '</td>';
     echo '<td> ' . $value->get(Product::DESC) . '</td>';
     echo '<td> ' . $value->get(Product::PRICE) . ' Fr.</td>';
+
     $cats = $value->get(Tag::class);
+    echo '<td>';
+    $tagfilter = null;
     foreach ($cats as $cat) {
-        echo '<td> ' . $cat->get(Tag::NAME) . ' </td>';
+        $tagfilter .= $cat->get(Tag::NAME) . ', ';
     }
+    $tagfilter = substr($tagfilter,0,-2);
+    echo $tagfilter;
+    echo '</td>';
+
+    echo '<td>';
+    $button = new ButtonWidget('webshop');
+    $button->setLabel($value->get(Product::NAME) . ' Kaufen');
+    $button->addCssClass('test');
+    $button->setValue('');
+    echo $button;
     echo '</tr>';
 }
 echo '</table>';
 
-$fernseherTag = Database::instance()->loadList(DBSchema::SCHEMA, Tag::class, [Tag::NAME => 'Android'])[0];
+$fernseherTag = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class, [Tag::NAME => 'Android'])[0];
 
 foreach ($testupdates as $fernseher) {
     $fernseher->connectTo($fernseherTag);
@@ -86,8 +104,8 @@ foreach ($testupdates as $fernseher) {
 }
 foreach ($testupdates as $testupdate) {
     $testupdate->set(Product::NAME, 'Sony Fernseher');
-//    $testupdate->dump();
-    Database::instance()->save(DBSchema::SCHEMA, $testupdate);
+    Database::instance()->save(DBConfig::SCHEMA, $testupdate);
+//    $pic = EntityFactory::newPicture('assets/img/img.png',$testupdate);
 }
 ?>
 

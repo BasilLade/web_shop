@@ -8,31 +8,10 @@
  *
  * @author Jorge Windmeisser
  */
-class MySQLDatabase extends Database implements DatabaseInt
+class MySQLDatabase extends DBConfig implements DatabaseInt
 {
 
-    const JSON = 'JSON';
 
-    /*
-     *  Treiber für den Datenbank-Hersteller festlegen. Kann auch oracle, 
-     *  postgre-SQL, mariaDB, etc... sein.
-     */
-    const DRIVER = 'mysql';
-
-    /*
-     * Host
-     */
-    const HOST = 'localhost';
-
-    /*
-     * Benutzername
-     */
-    const USER = 'root';
-
-    /*
-     * Passwort für die Datenbank am Arbeits-PC
-     */
-    const PASSWORD = '123';
     protected static $db = null;
     protected $transaction = false;
     protected $connection = null;

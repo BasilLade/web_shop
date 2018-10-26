@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 18, 2018 at 02:31 PM
--- Server version: 5.7.23-0ubuntu0.18.04.1
+-- Generation Time: Oct 26, 2018 at 10:41 AM
+-- Server version: 5.7.24-0ubuntu0.18.04.1
 -- PHP Version: 7.2.11-2+ubuntu18.04.1+deb.sury.org+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -37,9 +37,10 @@ CREATE TABLE `connector` (
 --
 
 INSERT INTO `connector` (`id`, `left_entity`, `right_entity`) VALUES
-('Connector_2D6C4BB4A389A76B1C93DFBB30959E05', 'Product_EAB2FC2347281D7482D51F3C8D9A89A2', 'Tag_A45D8FE0AAEB732D009B27334EFF512F'),
-('Connector_962D517E1D89139F440C3DAA199EFE8D', 'Product_EAB2FC2347281D7482D51F3C8D9A89A2', 'Tag_08BACE4E89ACC87E39B9DA773A276F31'),
-('Connector_ABD51250E2F98D2F6B7476F062BAF6AC', 'Product_70B3B37EF0B862F0D8CC4A8EEA9D3C35', 'Tag_08BACE4E89ACC87E39B9DA773A276F31');
+('Connector_3C4804AD752621156B7DED2EC044B7FA', 'Product_0D0C1F8F976F08B28D7E0DD24272AE7E', 'Tag_CDD4906DDD922643D3BA39787D388563'),
+('Connector_57B5CCCA8A77C99CBAC913A97A5A5ACB', 'Product_0D0C1F8F976F08B28D7E0DD24272AE7E', 'Tag_AE7BC1CEB8DD12A23A5651416A81210B'),
+('Connector_7B693E2970616F30B0115D5B11677FD9', 'Product_96B17DC61A808E98ECB7677E930BC812', 'Tag_CDD4906DDD922643D3BA39787D388563'),
+('Connector_AEE776A99E26875B515758159B8D6696', 'Product_96B17DC61A808E98ECB7677E930BC812', 'Tag_66176B8BDD592276A3D88E863B731B1E');
 
 -- --------------------------------------------------------
 
@@ -84,7 +85,9 @@ CREATE TABLE `picture` (
 --
 
 INSERT INTO `picture` (`id`, `picturepath`, `fk_product`) VALUES
-('Picture_EF7602FCC06144D7F061A27D85D90320', 'assets/img/img.png', 'Product_EAB2FC2347281D7482D51F3C8D9A89A2');
+('Picture_6997F7ACFA31D04411F35FC7B9C9FEBA', 'assets/img/img.png', 'Product_96B17DC61A808E98ECB7677E930BC812'),
+('Picture_B26A252E26EB3D240364845137CAD027', 'assets/img/img.png', 'Product_96B17DC61A808E98ECB7677E930BC812'),
+('Picture_B641EA6E555F42D84E4446AFE24E5149', 'assets/img/img.png', 'Product_0D0C1F8F976F08B28D7E0DD24272AE7E');
 
 -- --------------------------------------------------------
 
@@ -104,8 +107,8 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `description`, `price`) VALUES
-('Product_70B3B37EF0B862F0D8CC4A8EEA9D3C35', 'Sony Fernseher', 'das ist ein Fernseh', '773'),
-('Product_EAB2FC2347281D7482D51F3C8D9A89A2', 'Sony-Handy', 'das ist ein Handy', '424');
+('Product_0D0C1F8F976F08B28D7E0DD24272AE7E', 'Sony-Handy', 'das ist ein Handy', '424'),
+('Product_96B17DC61A808E98ECB7677E930BC812', 'Sony Fernseher', 'das ist ein Fernseh', '773');
 
 -- --------------------------------------------------------
 
@@ -123,9 +126,9 @@ CREATE TABLE `tag` (
 --
 
 INSERT INTO `tag` (`id`, `name`) VALUES
-('Tag_08BACE4E89ACC87E39B9DA773A276F31', 'Android'),
-('Tag_A45D8FE0AAEB732D009B27334EFF512F', 'Handy'),
-('Tag_851B3F0E68059665785BA835FC491D66', 'TV');
+('Tag_CDD4906DDD922643D3BA39787D388563', 'Android'),
+('Tag_AE7BC1CEB8DD12A23A5651416A81210B', 'Handy'),
+('Tag_66176B8BDD592276A3D88E863B731B1E', 'TV');
 
 --
 -- Indexes for dumped tables
@@ -156,7 +159,6 @@ ALTER TABLE `order`
 --
 ALTER TABLE `picture`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `picturepath_UNIQUE` (`picturepath`),
   ADD KEY `fk_bilder_produkt1_idx` (`fk_product`);
 
 --
