@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include_once('Autoloader.php');
 ?>
 <!DOCTYPE html>
@@ -15,16 +17,6 @@ include_once('Autoloader.php');
 <?php
 echo '&#9786<br>';
 
-//$asd = new AddToCart();
-//print_r($asd);
-
-$button = new ButtonWidget('webshop');
-$button->addCssClass('test');
-echo $button;
-$id = 'Product_70B3B37EF0B862F0D8CC4A8EEA9D3C35';
-$a = Database::instance()->load(DBConfig::SCHEMA,Product::class,$id);
-$a = $a->get(Product::PRICE);
-echo $a;
 //$phone = EntityFactory::newTag('Handy');
 //$tv = EntityFactory::newTag('TV');
 //$android = EntityFactory::newTag('Android');
