@@ -1,12 +1,14 @@
 function addToCart(id) {
+    console.log(id);
     $.ajax({
         type: 'POST',
         url: 'action/php/AddToCart.php',
         data: {
             test: "test war erfolgreich",
-            id: id
+            id: id,
         },
         success: function (data) {
+            console.log(data);
             alert(data);
         },
         error: function(a,b,c) {

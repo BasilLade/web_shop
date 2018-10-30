@@ -15,12 +15,16 @@ include_once('Autoloader.php');
 <?php
 echo '&#9786<br>';
 
-
+//$asd = new AddToCart();
+//print_r($asd);
 
 $button = new ButtonWidget('webshop');
 $button->addCssClass('test');
 echo $button;
-
+$id = 'Product_70B3B37EF0B862F0D8CC4A8EEA9D3C35';
+$a = Database::instance()->load(DBConfig::SCHEMA,Product::class,$id);
+$a = $a->get(Product::PRICE);
+echo $a;
 //$phone = EntityFactory::newTag('Handy');
 //$tv = EntityFactory::newTag('TV');
 //$android = EntityFactory::newTag('Android');
@@ -95,7 +99,7 @@ foreach ($products as $value) {
 //    echo $button;
     ?>
     <button type="button" onclick='addToCart("<?php echo $value->get(Product::ID) ?>")'><?= $value->get(Product::NAME) . ' Hinzufügen' ?></button>
-        <?php
+    <?php
     echo '</tr>';
 }
 echo '</table>';
