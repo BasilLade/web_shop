@@ -61,7 +61,7 @@ echo '</table>';
 echo '<table>';
 foreach ($products as $value) {
     echo '<tr>';
-    echo '<th>' . $value->get(Product::ID) . '</th>';
+    echo '<th class="id">' . $value->get(Product::ID) . '</th>';
     $bilder = $value->get(Picture::class);
 
     echo '<td>';
@@ -74,7 +74,7 @@ foreach ($products as $value) {
     echo '</td>';
     echo '<td> ' . $value->get(Product::NAME) . '</td>';
     echo '<td> ' . $value->get(Product::DESC) . '</td>';
-    echo '<td id="preis"> ' . $value->get(Product::PRICE) . ' Fr.</td>';
+    echo '<td class="preis"> ' . $value->get(Product::PRICE) . ' Fr.</td>';
 
     $cats = $value->get(Tag::class);
     echo '<td>';
@@ -94,7 +94,7 @@ foreach ($products as $value) {
 //    $button->setActionName('addToCart');
 //    echo $button;
     ?>
-    <button type="button" onclick="addToCart()"><?= $value->get(Product::NAME) . ' Hinzufügen' ?></button>
+    <button type="button" onclick='addToCart("<?php echo $value->get(Product::ID) ?>")'><?= $value->get(Product::NAME) . ' Hinzufügen' ?></button>
         <?php
     echo '</tr>';
 }

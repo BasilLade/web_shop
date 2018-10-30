@@ -1,12 +1,10 @@
-function addToCart() {
-    var preis = $('.preis').html();
-    preis = parseFloat(preis);
+function addToCart(id) {
     $.ajax({
         type: 'POST',
         url: 'action/php/AddToCart.php',
         data: {
             test: "test war erfolgreich",
-            preis: preis
+            id: id
         },
         success: function (data) {
             alert(data);
