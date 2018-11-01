@@ -15,6 +15,7 @@
  *
  * @author j.windmeisser
  * @author b.lade
+ * @author g.muheim
  */
 interface WidgetInt
 {

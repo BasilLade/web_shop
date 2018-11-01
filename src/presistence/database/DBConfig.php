@@ -26,10 +26,10 @@ class DBConfig extends Database
     /*
      * Benutzername
      */
-    const USER = 'cwolf';
+    const USER = 'root';
 
     /*
      * Passwort für die Datenbank am Arbeits-PC
      */
-    const PASSWORD = 'toor';
+    const PASSWORD = '123';
 }

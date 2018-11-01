@@ -4,7 +4,7 @@
  * Abstrakte Klasse für alle Datenbanktabellen. Implementiert EntityInt und
  * deren Funktionen (set, get, setData und getData)
  *
- * @author Jorge Windmeisser
+ * @author g.muehim
  */
 class Entity implements EntityInt
 {

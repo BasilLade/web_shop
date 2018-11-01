@@ -4,6 +4,7 @@
  * Klasse um einen AutoloaderBak zu erzeugen
  *
  * @author Jorge Windmeisser
+ * @author g.muheim
  */
 AutoloaderBak::register();
 

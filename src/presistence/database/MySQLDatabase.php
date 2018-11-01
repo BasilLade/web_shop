@@ -6,7 +6,7 @@
  * In der Funktion<code>connect()</code> werden diese an ein PDO-Objekt übergeben.
  * Das PDO-Objekt kümmert sich um die Verbindung zur Datenbank.
  *
- * @author Jorge Windmeisser
+ * @author g.muheim
  */
 class MySQLDatabase extends DBConfig implements DatabaseInt
 {
@@ -31,6 +31,11 @@ class MySQLDatabase extends DBConfig implements DatabaseInt
     {
         $this->transaction = false;
         return $this->connection->commit();
+    }
+    public function rollback()
+    {
+        $this->transaction = false;
+        return $this->connection->rollback();
     }
 
     public function load(string $schema, string $dataType, string $id, array $filter = [], $json = null)
@@ -380,10 +385,6 @@ class MySQLDatabase extends DBConfig implements DatabaseInt
         }
     }
 
-    public function rollback()
-    {
-        $this->transaction = false;
-        return $this->connection->rollback();
-    }
+
 
 }

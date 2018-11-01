@@ -7,7 +7,7 @@
  * Entitys sind Objekte die Daten enthalten die man speichern, verarbeiten,
  * übergeben kann.
  * 
- * @author Jorge Windmeisser
+ * @author g.muheim
  */
 interface EntityInt {
 

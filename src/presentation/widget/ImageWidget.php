@@ -5,7 +5,7 @@
  * ImageWidget Klasse
  * -----------------------------------------------------------------------------
  * 
- * @author b.lade
+ * @author g.muheim
  */
 class ImageWidget extends Widget {
     
