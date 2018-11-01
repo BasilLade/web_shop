@@ -18,3 +18,12 @@ function addToCart(id) {
         }
     });
 }
+
+$(document).ready(function () {
+    $('.tab a').on('click', function () {
+        let tag = $(this).html();
+        $(`tr:not(.${tag})`).hide();
+        $(`tr.${tag}`).show();
+        $(`tr.caption-of-table`).show();
+    });
+});

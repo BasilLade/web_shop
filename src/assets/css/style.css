@@ -20,3 +20,6 @@ th,td{
 .ImageWidget{
     border: 1px solid black;
 }
+ul li.tab a{
+    color: #fff !important;
+}
