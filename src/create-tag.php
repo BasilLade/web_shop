@@ -64,7 +64,7 @@ $tags = $protaghandy = Database::instance()->loadList(DBConfig::SCHEMA, Tag::cla
         <form class="col s12" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="tag-name" name="name" type="text" class="validate">
+                    <input id="tag-name" name="name" type="text" class="validate" autofocus>
                     <label for="tag-name">Tag Name</label>
                 </div>
             </div>

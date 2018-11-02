@@ -24,12 +24,12 @@ class DBConfig extends Database
     const HOST = 'localhost';
 
     /*
-     * Benutzername
+     * Benutzername der Datenbank
      */
     const USER = 'root';
 
     /*
-     * Passwort für die Datenbank am Arbeits-PC
+     * Passwort für die Datenbank
      */
     const PASSWORD = '123';
 }

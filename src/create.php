@@ -10,14 +10,27 @@ ini_set('display_errors', 1);
 require_once("Autoloader.php");
 
 if (isset($_POST["submit"])) {
+    $name = htmlspecialchars($_POST['name']);
+    $description = htmlspecialchars($_POST['description']);
+    $price = htmlspecialchars($_POST['price']);
+    if (isset($_POST['tag'])) {
+        $submitedTags = $_POST['tag'];
+    } else {
+        $submitedTags = null;
+    }
+
+//    if (empty($name)|| $price == '') {
+//        echo 'nicht richtig ausgefüllt';
+//    } else {
+
     $errors = [];
-    $toCheck = ["name", "description", "price"];
-    foreach ($toCheck as $check) {
-        if (empty($_POST[$check])) {
-            $errors[] = $check . "is empty";
+//        $toCheck = ["name", "description", "price"];
+    $toCheck = ["Produkt Name" => $name, "Produkt Preis" => $price, "Tag" => $submitedTags];
+    foreach ($toCheck as $key => $check) {
+        if (empty($check)) {
+            $errors[] = $key . " is empty! ";
         }
     }
-    $submitedTags = $_POST['tag'];
 
     if (count($errors) === 0) {
         $tags = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class, [
@@ -26,64 +39,64 @@ if (isset($_POST["submit"])) {
     } else {
         foreach ($errors as $error) {
             echo "<script>alert(" . $error . ");</script>";
+            echo $error;
         }
     }
-
-    $files = array_filter($_FILES['image']['name']);
-    $allImg = count($_FILES['image']['name']);
-//
-
     /**
      * IMPORTANT TO CHANGE PERMISSIONS
      * sudo chown www-data:ww-data /var/www/html/web_shop/src/assets/img
      * sudo chmod 755 /var/www/html/web_shop/src/assets/img
      */
+    $allImg = count($_FILES['image']['name']);
     for ($i = 0; $i < $allImg; $i++) {
-        $tmpFilePath = $_FILES['image']['tmp_name'][$i];
-        $target_dir = "assets/img/";
-        $target_file = $target_dir . basename($_FILES["image"]["name"][$i]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        if (is_uploaded_file($_FILES['image']['tmp_name'][$i])) {
+            $tmpFilePath = $_FILES['image']['tmp_name'][$i];
+            $target_dir = "assets/img/";
+            $target_file = $target_dir . basename($_FILES["image"]["name"][$i]);
+            $uploadOk = 1;
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 // Check if image file is a actual image or fake image
 //        $date = date_create();
 //        $timestamp = date_timestamp_get($date);
-        $check = getimagesize($_FILES["image"]["tmp_name"][$i]);
-        if ($check !== false) {
-            $uploadOk = 1;
-        } else {
-            echo "File is not an image.";
-            $uploadOk = 0;
-        }
-// Check if file already exists
-        if (file_exists($target_file)) {
-            $picture = EntityFactory::newPicture($target_file, $product);
-            $uploadOk = 0;
-
-        }
-// Check file size
-        if ($_FILES["image"]["size"][$i] > 2000000) {
-            echo "Sorry, your file is too large.";
-            print_r($_FILES['image']['size']);
-            $uploadOk = 0;
-        }
-// Allow certain file formats
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-            && $imageFileType != "gif") {
-            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-            $uploadOk = 0;
-        }
-// Check if $uploadOk is set to 0 by an error
-        if ($uploadOk == 0) {
-            echo "Sorry, your file was not uploaded. Either it already exists or somthing went wrong.";
-// if everything is ok, try to upload file
-        } else {
-            if (move_uploaded_file($tmpFilePath, $target_file)) {
-                $picture = EntityFactory::newPicture($target_file, $product);
+            $check = getimagesize($_FILES["image"]["tmp_name"][$i]);
+            if ($check !== false) {
+                $uploadOk = 1;
             } else {
-                echo "Sorry, there was an error uploading your file.";
+                echo "File is not an image.";
+                $uploadOk = 0;
+            }
+// Check if file already exists
+            if (file_exists($target_file)) {
+                $picture = EntityFactory::newPicture($target_file, $product);
+                $uploadOk = 0;
+
+            }
+// Check file size
+            if ($_FILES["image"]["size"][$i] > 2000000) {
+                echo "Sorry, your file is too large.";
+                print_r($_FILES['image']['size']);
+                $uploadOk = 0;
+            }
+// Allow certain file formats
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                && $imageFileType != "gif") {
+                echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+                $uploadOk = 0;
+            }
+// Check if $uploadOk is set to 0 by an error
+            if ($uploadOk == 0) {
+                echo "Sorry, your file was not uploaded. Either it already exists or somthing went wrong.";
+// if everything is ok, try to upload file
+            } else {
+                if (move_uploaded_file($tmpFilePath, $target_file)) {
+                    $picture = EntityFactory::newPicture($target_file, $product);
+                } else {
+                    echo "Sorry, there was an error uploading your file.";
+                }
             }
         }
     }
+
 }
 $tags = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class);
 ?>
@@ -117,14 +130,21 @@ $tags = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class);
         <form class="col s12" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="product-name" name="name" type="text" class="validate">
-                    <label for="product-name">Produkt Name</label>
+                    <input id="product-name" name="name" type="text" class="validate"
+                           value="<?php if (isset($name)) echo $name; ?>" autofocus>
+                    <label for="product-name">Produkt Name *</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="product-description" name="description" type="text" class="validate">
-                    <label for="product-description">Produkt Beschreibung</label>
+                    <input id="product-description" name="description" type="text" class="validate"
+                           value="<?php if (isset($description)) echo $description; ?>">
+                    <label for=" product-description">Produkt Beschreibung</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <label>Tags *</label>
                 </div>
             </div>
             <?php
@@ -132,7 +152,18 @@ $tags = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class);
                 ?>
                 <p>
                     <label>
-                        <input type="checkbox" name="tag[]" value="<?php echo $tag->get(Tag::NAME); ?>"/>
+                        <input type="checkbox" name="tag[]"
+                               value="<?php echo $tag->get(Tag::NAME) ?>"
+                            <?php
+                            if (isset($submitedTags)) {
+                                foreach ($submitedTags as $value) {
+                                    if ($value == $tag->get(Tag::NAME)) {
+                                        echo 'checked';
+                                    }
+                                }
+                            }
+                            ?>
+                        />
                         <span><?php echo $tag->get(Tag::NAME); ?></span>
                     </label>
                 </p>
@@ -142,8 +173,8 @@ $tags = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class);
             <div class="row">
                 <div class="input-field col s12">
                     <input id="product-price" name="price" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.05"
-                           class="validate">
-                    <label for="product-price">Produkt Preis</label>
+                           class="validate" value="<?php if (isset($price)) echo $price; ?>">
+                    <label for=" product-price">Produkt Preis *</label>
                 </div>
             </div>
             <div class="row">

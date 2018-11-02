@@ -43,9 +43,9 @@ $img = Database::instance()->loadList(DBConfig::SCHEMA, Picture::class);
             <ul class="tabs" style="background-color: #ee6e73; color:#fff;">
                 <li class="tab"><a href="#">alle</a></li>
                 <?php
-                    foreach ($tags as $tag){
-                        echo '<li class="tab"><a href="#">'. $tag->get(TAG::NAME) . '</a></li>';
-                    }
+                foreach ($tags as $tag) {
+                    echo '<li class="tab"><a href="#">' . $tag->get(TAG::NAME) . '</a></li>';
+                }
                 ?>
             </ul>
         </div>
@@ -57,7 +57,7 @@ $img = Database::instance()->loadList(DBConfig::SCHEMA, Picture::class);
 
     ?>
     <table>
-    <thead>
+        <thead>
         <tr class="caption-of-table">
             <th>ID</th>
             <th>Produkt Bild</th>
@@ -67,43 +67,45 @@ $img = Database::instance()->loadList(DBConfig::SCHEMA, Picture::class);
             <th>Produkt Kategorien</th>
             <th>Produkt kaufen</th>
         </tr>
-    </thead><tbody>
-    <?php
-    foreach ($products as $value) {
-        $cats = $value->get(Tag::class);
-        $tagfilter = null;
-        foreach ($cats as $cat) {
-            $tagfilter .= $cat->get(Tag::NAME) . ', ';
-        }
-        $tagclasses = str_replace(',', '', $tagfilter);
-        echo '<tr class="' . $tagclasses . ' alle">';
-        echo '<td>' . $value->get(Product::ID) . '</td>';
-
-        echo '<td>';
-        $bilder = $value->get(Picture::class);
-        foreach ($bilder as $bild) {
-            $image = new ImageWidget($bild->get(Picture::PATH));
-            $image->addCssClass('ProductPic');
-            echo $image;
-        }
-        echo '</td>';
-        echo '<td> ' . $value->get(Product::NAME) . '</td>';
-        echo '<td> ' . $value->get(Product::DESC) . '</td>';
-        echo '<td class="preis"> ' . $value->get(Product::PRICE) . ' Fr.</td>';
-
-        echo '<td>';
-        $tagfilter = substr($tagfilter, 0, -2);
-        echo $tagfilter;
-        echo '</td>';
-        echo '<td>';
-        ?>
-        <button type="button" class="waves-effect waves-light btn"
-                onclick='addToCart("<?php echo $value->get(Product::ID) ?>")'><?= $value->get(Product::NAME) . ' Hinzufügen' ?></button>
+        </thead>
+        <tbody>
         <?php
-        echo '</td></tr>';
-    }
-    echo '</tbody></table>';
-    ?>
+        foreach ($products as $value) {
+            $cats = $value->get(Tag::class);
+            $tagfilter = null;
+            foreach ($cats as $cat) {
+                $tagfilter .= $cat->get(Tag::NAME) . ', ';
+            }
+            $tagclasses = str_replace(',', '', $tagfilter);
+            echo '<tr class="' . $tagclasses . ' alle">';
+            echo '<td>' . $value->get(Product::ID) . '</td>';
+
+            echo '<td>';
+            $bilder = $value->get(Picture::class);
+            foreach ($bilder as $bild) {
+                $image = new ImageWidget($bild->get(Picture::PATH));
+                $image->addCssClass('ProductPic');
+                echo $image;
+            }
+            echo '</td>';
+            echo '<td> ' . $value->get(Product::NAME) . '</td>';
+            echo '<td> ' . $value->get(Product::DESC) . '</td>';
+            echo '<td class="preis"> ' . $value->get(Product::PRICE) . ' Fr.</td>';
+
+            echo '<td>';
+            $tagfilter = substr($tagfilter, 0, -2);
+            echo $tagfilter;
+            echo '</td>';
+            echo '<td>';
+            ?>
+            <button type="button" class="waves-effect waves-light btn"
+                    onclick="addToCart('<?php echo $value->get(Product::ID) ?>')"><?= $value->get(Product::NAME) . ' Hinzufügen' ?></button>
+            <?php
+            echo '</td></tr>';
+        }
+        ?>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
