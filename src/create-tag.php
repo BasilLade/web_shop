@@ -25,6 +25,7 @@ if (isset($_POST["submit"])) {
     }
     if (count($errors) === 0) {
         $tag = EntityFactory::newTag($_POST["name"]);
+        $success = '<div><p><font color="green">Tag wurde Hinzugefügt!</font></p>';
     } else {
         foreach ($errors as $error) {
             echo "<script>alert(" . $error . ");</script>";
@@ -64,11 +65,13 @@ $tags = $protaghandy = Database::instance()->loadList(DBConfig::SCHEMA, Tag::cla
             <div class="row">
                 <div class="input-field col s12">
                     <input id="tag-name" name="name" type="text" class="validate">
-                    <label for="tag-name">Produkt Name</label>
+                    <label for="tag-name">Tag Name</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
+                    <?php
+                    if(isset($success)) echo $success; ?>
                     <input id="submit" type="submit" name="submit" class="validate">
                 </div>
             </div>

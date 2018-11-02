@@ -17,64 +17,75 @@ if (isset($_POST["submit"])) {
             $errors[] = $check . "is empty";
         }
     }
-    $submitedTags = [];
-    foreach ($_POST as $key => $value) {
-        if (!strpos($key, "tag")) {
-            $tags[] = $key;
-        }
-    }
+    $submitedTags = $_POST['tag'];
+
     if (count($errors) === 0) {
-        $tags = $protaghandy = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class, [
+        $tags = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class, [
             Tag::NAME => $submitedTags]);
-        $product = EntityFactory::newProduct($_POST["name"], $tags, $_POST["description"], (int)$_POST["price"]);
+        $product = EntityFactory::newProduct($_POST["name"], $tags, $_POST["description"], (float)$_POST["price"]);
     } else {
         foreach ($errors as $error) {
             echo "<script>alert(" . $error . ");</script>";
         }
     }
-    $target_dir = "assets/img/";
-    $target_file = $target_dir . basename($_FILES["image"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-// Check if image file is a actual image or fake image
-//    $date = date_create();
-//    $timestamp = date_timestamp_get($date);
-    $check = getimagesize($_FILES["image"]["tmp_name"]);
-    if ($check !== false) {
+
+    $files = array_filter($_FILES['image']['name']);
+    $allImg = count($_FILES['image']['name']);
+//
+
+    /**
+     * IMPORTANT TO CHANGE PERMISSIONS
+     * sudo chown www-data:ww-data /var/www/html/web_shop/src/assets/img
+     * sudo chmod 755 /var/www/html/web_shop/src/assets/img
+     */
+    for ($i = 0; $i < $allImg; $i++) {
+        $tmpFilePath = $_FILES['image']['tmp_name'][$i];
+        $target_dir = "assets/img/";
+        $target_file = $target_dir . basename($_FILES["image"]["name"][$i]);
         $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
-    }
-// Check if file already exists
-    if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
-        $uploadOk = 0;
-    }
-// Check file size
-    if ($_FILES["image"]["size"] > 2000000) {
-        echo "Sorry, your file is too large.";
-        $uploadOk = 0;
-    }
-// Allow certain file formats
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif") {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-        $uploadOk = 0;
-    }
-// Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-    } else {
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-            $picture = EntityFactory::newPicture($target_file, $product);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+// Check if image file is a actual image or fake image
+//        $date = date_create();
+//        $timestamp = date_timestamp_get($date);
+        $check = getimagesize($_FILES["image"]["tmp_name"][$i]);
+        if ($check !== false) {
+            $uploadOk = 1;
         } else {
-            echo "Sorry, there was an error uploading your file.";
+            echo "File is not an image.";
+            $uploadOk = 0;
+        }
+// Check if file already exists
+        if (file_exists($target_file)) {
+            $picture = EntityFactory::newPicture($target_file, $product);
+            $uploadOk = 0;
+
+        }
+// Check file size
+        if ($_FILES["image"]["size"][$i] > 2000000) {
+            echo "Sorry, your file is too large.";
+            print_r($_FILES['image']['size']);
+            $uploadOk = 0;
+        }
+// Allow certain file formats
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+            && $imageFileType != "gif") {
+            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadOk = 0;
+        }
+// Check if $uploadOk is set to 0 by an error
+        if ($uploadOk == 0) {
+            echo "Sorry, your file was not uploaded. Either it already exists or somthing went wrong.";
+// if everything is ok, try to upload file
+        } else {
+            if (move_uploaded_file($tmpFilePath, $target_file)) {
+                $picture = EntityFactory::newPicture($target_file, $product);
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
         }
     }
 }
-$tags = $protaghandy = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class);
+$tags = Database::instance()->loadList(DBConfig::SCHEMA, Tag::class);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -121,7 +132,7 @@ $tags = $protaghandy = Database::instance()->loadList(DBConfig::SCHEMA, Tag::cla
                 ?>
                 <p>
                     <label>
-                        <input type="checkbox" name="tag-<?php echo $tag->get(Tag::NAME); ?>"/>
+                        <input type="checkbox" name="tag[]" value="<?php echo $tag->get(Tag::NAME); ?>"/>
                         <span><?php echo $tag->get(Tag::NAME); ?></span>
                     </label>
                 </p>
@@ -130,13 +141,14 @@ $tags = $protaghandy = Database::instance()->loadList(DBConfig::SCHEMA, Tag::cla
             ?>
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="product-price" name="price" type="number" class="validate">
+                    <input id="product-price" name="price" type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.05"
+                           class="validate">
                     <label for="product-price">Produkt Preis</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="product-image" name="image" type="file" class="validate">
+                    <input id="product-image" name="image[]" type="file" class="validate" multiple="multiple">
                 </div>
             </div>
             <div class="row">

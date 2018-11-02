@@ -19,6 +19,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `webshop`
 --
+DROP DATABASE IF EXISTS `webshop`;
+CREATE DATABASE `webshop`;
+USE `webshop`;
 
 -- --------------------------------------------------------
 
@@ -99,7 +102,7 @@ CREATE TABLE `product` (
   `id` varchar(255) NOT NULL,
   `name` varchar(50) NOT NULL,
   `description` varchar(250) DEFAULT NULL,
-  `price` decimal(10,0) NOT NULL DEFAULT '0'
+  `price` decimal(10,2) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -107,7 +110,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `description`, `price`) VALUES
-('Product_0D0C1F8F976F08B28D7E0DD24272AE7E', 'Sony-Handy', 'das ist ein Handy', '424'),
+('Product_0D0C1F8F976F08B28D7E0DD24272AE7E', 'Sony-Handy', 'das ist ein Handy', '424.95'),
 ('Product_96B17DC61A808E98ECB7677E930BC812', 'Sony Fernseher', 'das ist ein Fernseh', '773');
 
 -- --------------------------------------------------------
